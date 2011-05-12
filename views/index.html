@@ -1,0 +1,18 @@
+<ol>
+
+{{each locals}}
+<li id="${$index}">
+    
+    <div class="link">
+        <!--<a href="#" class="vote"><img src="http://ycombinator.com/images/grayarrow.gif"/></a>-->
+        <a href="${$value.url}" target="_blank">${$value.title}</a> <span>${$value.src}</span>
+    </div>
+    <div class="subtext">
+        ${$value.score} points by <a href="http://news.ycombinator.com/user?id=${$value.user}" target="_blank">${$value.user}</a> 
+        ${$value.age} ago | <a href="http://news.ycombinator.com/item?id=${$value.voteid}" target="_blank">${$value.commentcount} comments</a>
+    </div>
+
+</li>
+{{/each}}
+
+</ol>

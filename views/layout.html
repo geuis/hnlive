@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hacker News Live - Powered by Node.js</title>
+
+    <script src="http://code.jquery.com/jquery-1.5.1.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        socket = new io.Socket();
+        socket.connect();
+
+        $(document).ready(function(){
+
+            var items = [];
+
+            var targ = $('.container ol');
+
+            socket.on('message', function(data){
+
+                targ.html(data);
+
+                var timestamp = new Date(),
+                    timestr=[ timestamp.getMonth()+1, '/', timestamp.getDate(), '/', timestamp.getFullYear(), ' ', timestamp.getHours(),':', timestamp.getMinutes(),':', timestamp.getSeconds() ];
+
+                $('#timestamp').html( timestr.join('') );
+
+
+                targ.find('li').each(function(index){
+
+                    if( $(this).attr('id') !== items[index] ){
+                        
+                        $(this).animate({'opacity':0.1}, 500, function(){
+
+                            $(this).animate({'opacity':1}, 500);
+                        
+                        });
+                        
+                    }
+
+                    items[index] = $(this).attr('id');
+                });
+                
+
+            });
+            
+            socket.on('disconnect', function(data){
+
+                timer = setInterval(function(){
+                    socket.connect();
+                },1000);
+
+            });
+
+        });
+    </script>
+<style>
+body{
+    font-family: Verdana;
+    font-size: 10pt;
+    color: #828282;
+}
+a{
+    text-decoration:none;
+    color:#000;
+}
+a:visited{ color:#828282; }
+
+.container{
+    width:85%;
+    margin:8px auto;
+    background: #F6F6EF;
+    position:relative;
+}
+    .header{
+        background:#ff6600;
+        font-size:10pt;
+        color:#000;         
+        width:100%;
+        height:24px;
+        line-height:24px;
+    }
+    .header #timestamp{
+        float:right;
+        margin:0 10px 0 0;
+    }
+    .header .sitename{
+        font-weight:bold;
+        padding:0;
+        margin:0 5px 0 0;
+    }    
+    .header img, .header a{
+        display:inline-block;
+        float:left;
+        color:#000;
+        text-decoration:none;       
+        padding:0 5px 0 5px;
+    }
+        .header img{ 
+            width:18px;
+            height:18px;
+            border:1px solid #fff;
+            margin:2px 4px 0 2px;
+            padding:0px;
+        }
+        .header span{
+            float:left;
+        }
+ol{
+    padding:0 0 0 30px;
+    margin:10px 0 50px 0;
+}
+    ol li{
+        margin-bottom:5px;
+        padding:0 0 0 5px;
+        position:relative;
+    }
+    ol li .link{
+
+    }
+    ol li .link .vote{
+        position:absolute;
+        left:-7px;
+    }
+    ol li .link span{
+        font-size:8pt;
+    }
+
+.subtext, .subtext a {
+    color: #828282;
+    font-size:7pt;
+}
+
+#contact{
+    position:absolute;
+    top:24px;
+    right:10px;
+    text-align:right;
+    z-index:1000;
+}
+#contact div{
+    margin:0 0 5px 0;
+}
+#contact div a{
+    color:#000;
+    font-weight:bold;
+    display:inline-block;
+}
+    #contact div a:hover{
+        pointer:cursor;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <img src="http://ycombinator.com/images/y18.gif"/>
+        <a target="_blank" href="http://news.ycombinator.com/news" class="sitename">Hacker News Live</a> 
+        <a target="_blank" href="http://news.ycombinator.com/newest">new</a><span>|</span>
+        <a target="_blank" href="http://news.ycombinator.com/newcomments">comments</a><span>|</span>
+        <a target="_blank" href="http://news.ycombinator.com/ask">ask</a><span>|</span>
+        <a target="_blank" href="http://news.ycombinator.com/jobs">jobs</a><span>|</span>
+        <a target="_blank" href="http://news.ycombinator.com/submit">submit</a></span>
+        <div id="timestamp"></div>
+    </div>
+    <div id="contact">
+        <a href="http://twitter.com/share" class="twitter-share-button" data-count="vertical" data-via="geuis">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+        <div>Follow: <br/><a href="http://twitter.com/#!/geuis" target="_blank">@geuis</a></div>
+        <div>Contact: <br/><a href="mailto:geuis.teses@gmail.com">geuis.teses@gmail.com</a></div>
+    </div>
+{{html body}}
+</div>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-273371-18']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+</html>
